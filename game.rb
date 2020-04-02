@@ -1,7 +1,7 @@
 class Game
 
     def start
-        puts "Let's play Tic-Tac-Toe!!!"
+        puts "Let's play Tic-Tac-Toe!"
         puts "What is the name of player #1:"
         name_1 = gets.chomp
         puts "What 1 letter/character would you like to be your game marker?"
@@ -24,7 +24,7 @@ class Game
     end
 
     def end?
-        @board.cells.all?{ | cell | cell == "X" || cell == "O"}
+        @board.cells.all?{ | cell | cell == @player_1.symbol || cell == @player_2.symbol}
     end
 
     def winner (player)
@@ -43,11 +43,12 @@ class Game
         self.start
         until self.end?
             self.turn(@player_1)
-            break if self.end? || self.winner(@player_1)
+            break if self.end?
+            break if self.winner(@player_1)
             self.turn(@player_2)
             break if self.winner(@player_2)
         end
-        puts "It's a draw." if self.end? && !self.winner(@player_1) && !self.winner(@player_2)
+        puts "It's a draw." if self.end? && (!self.winner(@player_1) || !self.winner(@player_2))
         puts ""
         puts "Would you like to play a new game? Press 'y' for yes or 'n' for no."
         repeat_game = gets.chomp.downcase
