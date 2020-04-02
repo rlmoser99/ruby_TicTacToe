@@ -3,9 +3,9 @@ class Game
   def start
     puts "Let's play a simple Tic-Tac-Toe game in the console!"
     puts ""
-    @player_1 = Player.new
+    @player_1 = Player.new("1")
     puts ""
-    @player_2 = Player.new(@player_1.symbol)
+    @player_2 = Player.new("2", @player_1.symbol)
     @board = Board.new
     @board.show
   end

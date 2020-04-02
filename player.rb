@@ -1,13 +1,11 @@
 class Player
-  @@player_count = 0
   attr_reader :name, :symbol
 
-  def initialize (duplicate_symbol = nil)
-    @@player_count += 1
-    puts "What is the name of player ##{@@player_count}?"
+  def initialize (num, duplicate_symbol = nil)
+    puts "What is the name of player ##{num}?"
     @name = gets.chomp
     puts "What 1 letter/character would you like to be your game marker?"
-    puts "It can not be '#{duplicate_symbol}'." if @@player_count == 2
+    puts "It can not be '#{duplicate_symbol}'." if num == 2
     @symbol = gets.chomp until @symbol.to_s.length == 1 && @symbol != duplicate_symbol
   end
 
