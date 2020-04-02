@@ -4,7 +4,7 @@ class Player
 
     def initialize (duplicate_symbol = nil)
         @@player_count += 1
-        puts "What is the name of player ##{@@player_count}:"
+        puts "What is the name of player ##{@@player_count}?"
         @name = gets.chomp
         puts "What 1 letter/character would you like to be your game marker?"
         puts "It can not be '#{duplicate_symbol}'." if @@player_count == 2
