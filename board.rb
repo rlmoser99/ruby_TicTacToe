@@ -14,4 +14,9 @@ class Board
         puts ""
     end
 
+    def full?(marker1, marker2)
+        @cells.all?{ | cell | cell == marker1 || cell == marker2}
+        # @board.cells.all?{ | cell | cell == @player_1.symbol || cell == @player_2.symbol}
+    end
+
 end
