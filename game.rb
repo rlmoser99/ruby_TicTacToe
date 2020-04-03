@@ -38,7 +38,7 @@ class Game
       self.turn(@player_2)
       break if self.winner(@player_2)
     end
-    puts "It's a draw." if @board.full?(@player_1.symbol, @player_2.symbol) && (!self.winner(@player_1) || !self.winner(@player_2))
+    puts "It's a draw." if !self.winner(@player_1) && !self.winner(@player_2) && @board.full?(@player_1.symbol, @player_2.symbol)
     puts ""
     puts "Would you like to play a new game? Press 'y' for yes or 'n' for no."
     repeat_game = gets.chomp.downcase
