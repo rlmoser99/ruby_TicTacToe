@@ -14,6 +14,8 @@ class Game
     play_game
   end
 
+  private
+
   def create_player(number, duplicate_symbol = nil)
     puts display_name_prompt(number)
     name = gets.chomp
@@ -86,6 +88,6 @@ class Game
     puts display_play_again
     repeat_input = gets.chomp.downcase
     Game.new if repeat_input == 'y'
-    puts closing_greeting(@player1.name, @player2.name) if repeat_input == 'n'
+    puts closing_greeting(@player1.name, @player2.name) if repeat_input != 'y'
   end
 end

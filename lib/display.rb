@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+# Text needed to Tic-Tac-Toe
 module Display
+  # rubocop:disable Layout/LineLength
   def display_intro
     "Let's play a simple Tic-Tac-Toe game in the console! \n\n"
   end
@@ -40,4 +42,5 @@ module Display
   def closing_greeting(player1, player2)
     "Ok. Have a great day, #{player1} and #{player2}!"
   end
+  # rubocop:enable Layout/LineLength
 end
