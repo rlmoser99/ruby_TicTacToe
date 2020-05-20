@@ -1,10 +1,14 @@
+# frozen_string_literal: true
+
+# Tic-Tac-Toe Board
 class Board
   attr_accessor :cells
   def initialize
     @cells = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   end
 
-  def show
+  # rubocop:disable Metrics/AbcSize
+  def board_show
     puts <<-HEREDOC
 
        #{cells[0]} | #{cells[1]} | #{cells[2]}
@@ -15,9 +19,9 @@ class Board
 
     HEREDOC
   end
+  # rubocop:enable Metrics/AbcSize
 
-  def full?(symbol_1, symbol_2)
-    @cells.all?{ | cell | cell == symbol_1 || cell == symbol_2}
+  def full?(symbol1, symbol2)
+    @cells.all? { |cell| cell == symbol1 || cell == symbol2 }
   end
-
 end
