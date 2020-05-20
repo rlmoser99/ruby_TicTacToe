@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require './display'
+require_relative 'display.rb'
 
 # Contains the logic to play the game
 class Game
