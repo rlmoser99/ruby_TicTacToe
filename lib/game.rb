@@ -33,6 +33,14 @@ class Game
     @input
   end
 
+  def play_game
+    @board = Board.new
+    @board.show
+    turn_order
+    conclusion
+    repeat_game
+  end
+
   def turn(player)
     cell = turn_input(player)
     @board.cells[cell.to_i - 1] = player.symbol
@@ -51,15 +59,27 @@ class Game
   end
 
   def turn_order
-    until @board.full?(@player1.symbol, @player2.symbol)
+    @winner = nil
+    until turns_over?
       turn(@player1)
-      break if @board.full?(@player1.symbol, @player2.symbol)
-      break if @board.game_over?
+      @winner = @player1 if @board.game_over?
+      break if turns_over?
 
       turn(@player2)
-      break if @board.game_over?
+      @winner = @player2 if @board.game_over?
     end
-    # re-work this to easily show who the winner is
+  end
+
+  def turns_over?
+    @board.full?(@player1.symbol, @player2.symbol) || @winner
+  end
+
+  def conclusion
+    if @winner
+      puts display_winner(@winner.name)
+    else
+      puts display_tie
+    end
   end
 
   def repeat_game
@@ -67,16 +87,5 @@ class Game
     repeat_input = gets.chomp.downcase
     Game.new if repeat_input == 'y'
     puts closing_greeting(@player1.name, @player2.name) if repeat_input == 'n'
-  end
-
-  def play_game
-    @board = Board.new
-    @board.show
-    turn_order
-    # puts "GAME OVER! #{player.name} is the winner!" if three_in_a_row
-    # if !winner(@player1) && !winner(@player2) && @board.full?(@player1.symbol, @player2.symbol)
-    #   puts "It's a draw."
-    # end
-    repeat_game
   end
 end
