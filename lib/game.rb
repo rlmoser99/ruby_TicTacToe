@@ -50,41 +50,33 @@ class Game
     @number
   end
 
-  def winner(player)
-    three_in_a_row = false
-    winning_combinations = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]
-    ]
-    winning_combinations.each do |combination|
-      if combination.all? { |cell| @board.cells[cell] == player.symbol }
-        three_in_a_row = true
-      end
+  def turn_order
+    until @board.full?(@player1.symbol, @player2.symbol)
+      turn(@player1)
+      break if @board.full?(@player1.symbol, @player2.symbol)
+      break if @board.game_over?
+
+      turn(@player2)
+      break if @board.game_over?
     end
-    puts "GAME OVER! #{player.name} is the winner!" if three_in_a_row
-    three_in_a_row
+    # re-work this to easily show who the winner is
+  end
+
+  def repeat_game
+    puts display_play_again
+    repeat_input = gets.chomp.downcase
+    Game.new if repeat_input == 'y'
+    puts closing_greeting(@player1.name, @player2.name) if repeat_input == 'n'
   end
 
   def play_game
     @board = Board.new
     @board.show
-    turn(@player1)
-    # until @board.full?(@player1.symbol, @player2.symbol)
-    #   turn(@player1)
-    #   break if @board.full?(@player1.symbol, @player2.symbol)
-    #   break if winner(@player1)
-
-    #   turn(@player2)
-    #   break if winner(@player2)
-    # end
+    turn_order
+    # puts "GAME OVER! #{player.name} is the winner!" if three_in_a_row
     # if !winner(@player1) && !winner(@player2) && @board.full?(@player1.symbol, @player2.symbol)
     #   puts "It's a draw."
     # end
-    # puts ''
-    # puts "Would you like to play a new game? Press 'y' for yes or 'n' for no."
-    # repeat_game = gets.chomp.downcase
-    # Game.new.play if repeat_game == 'y'
-    # if repeat_game == 'n'
-    #   puts "Ok. Have a great day, #{@player1.name} and #{@player2.name}!"
-    # end
+    repeat_game
   end
 end
