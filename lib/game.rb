@@ -11,7 +11,7 @@ class Game
     puts display_intro
     @player1 = create_player(1)
     @player2 = create_player(2, player1.symbol)
-    play
+    play_game
   end
 
   def create_player(number, duplicate_symbol = nil)
@@ -33,16 +33,21 @@ class Game
     @input
   end
 
-  def start
-    @board = Board.new
+  def turn(player)
+    cell = turn_input(player)
+    @board.cells[cell.to_i - 1] = player.symbol
     @board.show
   end
 
-  def turn(player)
-    puts "#{player.name}, please enter a number (1-9) that is available to place an '#{player.symbol}'"
-    cell = gets.chomp until @board.cells[cell.to_i - 1] == cell.to_i
-    @board.cells[cell.to_i - 1] = player.symbol
-    @board.show
+  def turn_input(player)
+    loop do
+      puts display_player_turn(player.name, player.symbol)
+      @number = gets.chomp
+      break if @board.cells[@number.to_i - 1] == @number.to_i
+
+      puts display_input_warning
+    end
+    @number
   end
 
   def winner(player)
@@ -59,8 +64,10 @@ class Game
     three_in_a_row
   end
 
-  def play
-    start
+  def play_game
+    @board = Board.new
+    @board.show
+    turn(@player1)
     # until @board.full?(@player1.symbol, @player2.symbol)
     #   turn(@player1)
     #   break if @board.full?(@player1.symbol, @player2.symbol)

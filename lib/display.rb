@@ -20,4 +20,8 @@ module Display
   def display_input_warning
     "\e[31mSorry, that is an invalid answer. Please, try again.\e[0m"
   end
+
+  def display_player_turn(name, symbol)
+    "#{name}, please enter a number (1-9) that is available to place an '#{symbol}'"
+  end
 end

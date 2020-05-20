@@ -8,7 +8,7 @@ class Board
   end
 
   # rubocop:disable Metrics/AbcSize
-  def board_show
+  def show
     puts <<-HEREDOC
 
        #{cells[0]} | #{cells[1]} | #{cells[2]}
