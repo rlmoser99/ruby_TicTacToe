@@ -32,7 +32,7 @@ class Board
   end
 
   def full?
-    @cells.all? { |cell| cell =~ /[^0-9]/ }
+    cells.all? { |cell| cell =~ /[^0-9]/ }
   end
 
   def game_over?

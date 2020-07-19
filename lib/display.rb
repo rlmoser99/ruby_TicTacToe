@@ -12,7 +12,7 @@ module Display
   end
 
   def display_symbol_prompt
-    'What 1 letter/character would you like to be your game marker?'
+    'What 1 letter (or special character) would you like to be your game marker?'
   end
 
   def display_first_symbol(duplicate)
