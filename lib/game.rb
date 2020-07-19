@@ -5,13 +5,25 @@ require_relative 'display.rb'
 # Contains the logic to play the game
 class Game
   include Display
-  attr_reader :player1, :player2
+  attr_reader :first_player, :second_player
 
   def initialize
+    @board = Board.new
+  end
+
+  # TooManyStatements
+  def play
     puts display_intro
-    @player1 = create_player(1)
-    @player2 = create_player(2, player1.symbol)
-    play_game
+    create_game_players
+    @board.show
+    player_turns
+    conclusion
+    repeat_game
+  end
+
+  def create_game_players
+    @first_player = create_player(1)
+    @second_player = create_player(2, first_player.symbol)
   end
 
   private
@@ -19,10 +31,12 @@ class Game
   def create_player(number, duplicate_symbol = nil)
     puts display_name_prompt(number)
     name = gets.chomp
+    # Update symbol to not be able to use a digit 0-9 because of full? check.
     symbol = symbol_input(duplicate_symbol)
     Player.new(name, symbol)
   end
 
+  # TooManyStatements
   def symbol_input(duplicate)
     loop do
       puts display_symbol_prompt
@@ -35,45 +49,42 @@ class Game
     @input
   end
 
-  def play_game
-    @board = Board.new
-    @board.show
-    turn_order
-    conclusion
-    repeat_game
-  end
-
   def turn(player)
     cell = turn_input(player)
-    @board.cells[cell.to_i - 1] = player.symbol
+    @board.update_board(cell - 1, player.symbol)
+    # @board.cells[cell.to_i - 1] = player.symbol
     @board.show
   end
 
+  # TooManyStatements
   def turn_input(player)
     loop do
       puts display_player_turn(player.name, player.symbol)
-      @number = gets.chomp
-      break if @board.cells[@number.to_i - 1] == @number.to_i
+      @number = gets.chomp.to_i
+      break if @board.cells[@number - 1] == @number
 
       puts display_input_warning
     end
     @number
   end
 
-  def turn_order
-    @winner = nil
-    until turns_over?
-      turn(@player1)
-      @winner = @player1 if @board.game_over?
-      break if turns_over?
+  def player_turns
+    @current_player = @first_player
+    until @board.full?
+      turn(@current_player)
+      break if @board.game_over?
 
-      turn(@player2)
-      @winner = @player2 if @board.game_over?
+      switch_current_player
     end
+    @winner = @current_player
   end
 
-  def turns_over?
-    @board.full?(@player1.symbol, @player2.symbol) || @winner
+  def switch_current_player
+    @current_player = if @current_player == @first_player
+                        @second_player
+                      else
+                        @first_player
+                      end
   end
 
   def conclusion
@@ -88,6 +99,8 @@ class Game
     puts display_play_again
     repeat_input = gets.chomp.downcase
     Game.new if repeat_input == 'y'
-    puts closing_greeting(@player1.name, @player2.name) if repeat_input != 'y'
+    if repeat_input != 'y'
+      puts closing_greeting(@first_player.name, @second_player.name)
+    end
   end
 end

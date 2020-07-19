@@ -5,83 +5,81 @@
 require_relative '../lib/board'
 
 describe Board do
-  context '#full? false (continue game) & true (end game)' do
-    it 'empty board is false' do
-      board = Board.new
-      expect(board.full?('x', 'o')).to be false
+  subject(:board) { described_class.new }
+
+  describe '#full?' do
+    context 'when board is new' do
+      it 'is not full' do
+        expect(board.full?).to be false
+      end
     end
 
-    it 'half-used board is false' do
-      board = Board.new
-      board.cells = %w[x 2 o 4 5 o x 8 o]
-      expect(board.full?('x', 'o')).to be false
+    context 'when board is partially used' do
+      before do
+        board.instance_variable_set(:@cells, %w[x 2 o 4 5 o x 8 o])
+      end
+
+      it 'is not full' do
+        expect(board.full?).to be false
+      end
     end
 
-    it 'full board is true' do
-      board = Board.new
-      board.cells = %w[x x o o x o x o o]
-      expect(board.full?('x', 'o')).to be true
+    context 'when board is completely full' do
+      before do
+        board.instance_variable_set(:@cells, %w[x x o o x o x o o])
+      end
+
+      it 'is full' do
+        expect(board.full?).to be true
+      end
     end
   end
 
-  context '#game_over? false (continue game) & true (end game)' do
-    it 'empty board is false' do
-      board = Board.new
-      expect(board.game_over?).to be false
+  describe '#game_over?' do
+    context 'when board is new' do
+      it 'is not game over' do
+        expect(board).not_to be_game_over
+      end
     end
 
-    it 'half-played game is false' do
-      board = Board.new
-      board.cells = %w[x 2 x 4 5 o o 8 o]
-      expect(board.game_over?).to be false
+    context 'when board is half-played' do
+      before do
+        board.instance_variable_set(:@cells, %w[x 2 x 4 5 o o 8 o])
+      end
+
+      it 'is not game over' do
+        expect(board).not_to be_game_over
+      end
     end
 
-    it 'top 3 in a row is true' do
-      board = Board.new
-      board.cells = %w[x x x 4 5 o o 8 o]
-      expect(board.game_over?).to be true
+    context 'when there is a horizontal 3-in-a-row' do
+      before do
+        board.instance_variable_set(:@cells, %w[x x x 4 5 o o 8 o])
+      end
+
+      it 'is game over' do
+        expect(board).to be_game_over
+      end
     end
 
-    it 'horizontal middle 3 in a row is true' do
-      board = Board.new
-      board.cells = %w[1 x 3 o o o x 8 x]
-      expect(board.game_over?).to be true
+    context 'when there is a vertical 3-in-a-row' do
+      before do
+        board.instance_variable_set(:@cells, %w[x o 3 4 o x 7 o x])
+      end
+
+      it 'is game over' do
+        expect(board).to be_game_over
+      end
     end
 
-    it 'bottom 3 in a row is true' do
-      board = Board.new
-      board.cells = %w[1 o o 4 o 6 x x x]
-      expect(board.game_over?).to be true
-    end
+    context 'when there is a diagonal 3-in-a-row' do
+      before do
+        board.instance_variable_set(:@cells, %w[o 2 x 4 o x 7 x o])
+      end
 
-    it 'left 3 in a row is true' do
-      board = Board.new
-      board.cells = %w[x 2 o x o 6 x 8 o]
-      expect(board.game_over?).to be true
-    end
-
-    it 'vertical middle 3 in a row is true' do
-      board = Board.new
-      board.cells = %w[x o 3 4 o x 7 o x]
-      expect(board.game_over?).to be true
-    end
-
-    it 'right 3 in a row is true' do
-      board = Board.new
-      board.cells = %w[1 o x 4 o x o 8 x]
-      expect(board.game_over?).to be true
-    end
-
-    it 'diagonal \ 3 in a row is true' do
-      board = Board.new
-      board.cells = %w[o 2 x 4 o x 7 x o]
-      expect(board.game_over?).to be true
-    end
-
-    it 'diagonal / 3 in a row is true' do
-      board = Board.new
-      board.cells = %w[o o x 4 x 6 x o 9]
-      expect(board.game_over?).to be true
+      it 'is game over' do
+        expect(board).to be_game_over
+      end
     end
   end
 end

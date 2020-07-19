@@ -39,8 +39,8 @@ module Display
     "Would you like to play a new game? Press 'y' for yes or 'n' for no."
   end
 
-  def closing_greeting(player1, player2)
-    "Ok. Have a great day, #{player1} and #{player2}!"
+  def closing_greeting(first_player, second_player)
+    "Ok. Have a great day, #{first_player} and #{second_player}!"
   end
   # rubocop:enable Layout/LineLength
 end
