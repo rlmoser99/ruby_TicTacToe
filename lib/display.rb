@@ -12,7 +12,7 @@ module Display
   end
 
   def display_symbol_prompt
-    'What 1 letter/character would you like to be your game marker?'
+    'What 1 letter (or special character) would you like to be your game marker?'
   end
 
   def display_first_symbol(duplicate)
@@ -39,8 +39,8 @@ module Display
     "Would you like to play a new game? Press 'y' for yes or 'n' for no."
   end
 
-  def closing_greeting(player1, player2)
-    "Ok. Have a great day, #{player1} and #{player2}!"
+  def closing_greeting(first_player, second_player)
+    "Ok. Have a great day, #{first_player} and #{second_player}!"
   end
   # rubocop:enable Layout/LineLength
 end

@@ -5,16 +5,30 @@ require_relative 'display.rb'
 # Contains the logic to play the game
 class Game
   include Display
-  attr_reader :player1, :player2
+  attr_reader :first_player, :second_player, :board, :current_player
 
   def initialize
-    puts display_intro
-    @player1 = create_player(1)
-    @player2 = create_player(2, player1.symbol)
-    play_game
+    @board = Board.new
+    @first_player = nil
+    @second_player = nil
+    @current_player = nil
+  end
+
+  def play
+    game_set_up
+    board.show
+    player_turns
+    conclusion
+    repeat_game
   end
 
   private
+
+  def game_set_up
+    puts display_intro
+    @first_player = create_player(1)
+    @second_player = create_player(2, first_player.symbol)
+  end
 
   def create_player(number, duplicate_symbol = nil)
     puts display_name_prompt(number)
@@ -24,61 +38,55 @@ class Game
   end
 
   def symbol_input(duplicate)
-    loop do
-      puts display_symbol_prompt
-      puts display_first_symbol(duplicate) if duplicate
-      @input = gets.chomp
-      break if @input.match?(/^.$/) && @input != duplicate
+    player_symbol_prompts(duplicate)
+    input = gets.chomp
+    return input if input.match?(/^[^0-9]$/) && input != duplicate
 
-      puts display_input_warning
-    end
-    @input
+    puts display_input_warning
+    symbol_input(duplicate)
   end
 
-  def play_game
-    @board = Board.new
-    @board.show
-    turn_order
-    conclusion
-    repeat_game
+  def player_symbol_prompts(duplicate)
+    puts display_symbol_prompt
+    puts display_first_symbol(duplicate) if duplicate
+  end
+
+  def player_turns
+    @current_player = first_player
+    until board.full?
+      turn(current_player)
+      break if board.game_over?
+
+      @current_player = switch_current_player
+    end
   end
 
   def turn(player)
     cell = turn_input(player)
-    @board.cells[cell.to_i - 1] = player.symbol
-    @board.show
+    board.update_board(cell - 1, player.symbol)
+    board.show
   end
 
   def turn_input(player)
-    loop do
-      puts display_player_turn(player.name, player.symbol)
-      @number = gets.chomp
-      break if @board.cells[@number.to_i - 1] == @number.to_i
+    puts display_player_turn(player.name, player.symbol)
+    number = gets.chomp.to_i
+    return number if board.valid_move?(number)
 
-      puts display_input_warning
-    end
-    @number
+    puts display_input_warning
+    turn_input(player)
   end
 
-  def turn_order
-    @winner = nil
-    until turns_over?
-      turn(@player1)
-      @winner = @player1 if @board.game_over?
-      break if turns_over?
-
-      turn(@player2)
-      @winner = @player2 if @board.game_over?
+  def switch_current_player
+    if current_player == first_player
+      second_player
+    else
+      first_player
     end
-  end
-
-  def turns_over?
-    @board.full?(@player1.symbol, @player2.symbol) || @winner
   end
 
   def conclusion
-    if @winner
-      puts display_winner(@winner.name)
+    if board.game_over?
+      puts display_winner(current_player.name)
     else
       puts display_tie
     end
@@ -87,7 +95,11 @@ class Game
   def repeat_game
     puts display_play_again
     repeat_input = gets.chomp.downcase
-    Game.new if repeat_input == 'y'
-    puts closing_greeting(@player1.name, @player2.name) if repeat_input != 'y'
+    if repeat_input == 'y'
+      game = Game.new
+      game.play
+    else
+      puts closing_greeting(first_player.name, second_player.name)
+    end
   end
 end
