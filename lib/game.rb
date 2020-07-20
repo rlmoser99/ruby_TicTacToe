@@ -51,6 +51,16 @@ class Game
     puts display_first_symbol(duplicate) if duplicate
   end
 
+  def player_turns
+    @current_player = first_player
+    until board.full?
+      turn(current_player)
+      break if board.game_over?
+
+      @current_player = switch_current_player
+    end
+  end
+
   def turn(player)
     cell = turn_input(player)
     board.update_board(cell - 1, player.symbol)
@@ -64,16 +74,6 @@ class Game
 
     puts display_input_warning
     turn_input(player)
-  end
-
-  def player_turns
-    @current_player = first_player
-    until board.full?
-      turn(current_player)
-      break if board.game_over?
-
-      @current_player = switch_current_player
-    end
   end
 
   def switch_current_player
