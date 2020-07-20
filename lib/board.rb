@@ -31,6 +31,10 @@ class Board
     @cells[number] = symbol
   end
 
+  def valid_move?(number)
+    cells[number - 1] == number
+  end
+
   def full?
     cells.all? { |cell| cell =~ /[^0-9]/ }
   end

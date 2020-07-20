@@ -60,7 +60,7 @@ class Game
   def turn_input(player)
     puts display_player_turn(player.name, player.symbol)
     number = gets.chomp.to_i
-    return number if board.cells[number - 1] == number
+    return number if board.valid_move?(number)
 
     puts display_input_warning
     turn_input(player)
