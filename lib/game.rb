@@ -22,33 +22,14 @@ class Game
     repeat_game
   end
 
-  private
-
-  def game_set_up
-    puts display_intro
-    @first_player = create_player(1)
-    @second_player = create_player(2, first_player.symbol)
-  end
+  # The methods below are only used iternally & could be 'private'
+  # However, the message(s) that are sent should be tested.
 
   def create_player(number, duplicate_symbol = nil)
     puts display_name_prompt(number)
     name = gets.chomp
     symbol = symbol_input(duplicate_symbol)
     Player.new(name, symbol)
-  end
-
-  def symbol_input(duplicate)
-    player_symbol_prompts(duplicate)
-    input = gets.chomp
-    return input if input.match?(/^[^0-9]$/) && input != duplicate
-
-    puts display_input_warning
-    symbol_input(duplicate)
-  end
-
-  def player_symbol_prompts(duplicate)
-    puts display_symbol_prompt
-    puts display_first_symbol(duplicate) if duplicate
   end
 
   def player_turns
@@ -76,14 +57,6 @@ class Game
     turn_input(player)
   end
 
-  def switch_current_player
-    if current_player == first_player
-      second_player
-    else
-      first_player
-    end
-  end
-
   def conclusion
     if board.game_over?
       puts display_winner(current_player.name)
@@ -100,6 +73,36 @@ class Game
       game.play
     else
       puts closing_greeting(first_player.name, second_player.name)
+    end
+  end
+
+  private
+
+  def game_set_up
+    puts display_intro
+    @first_player = create_player(1)
+    @second_player = create_player(2, first_player.symbol)
+  end
+
+  def symbol_input(duplicate)
+    player_symbol_prompts(duplicate)
+    input = gets.chomp
+    return input if input.match?(/^[^0-9]$/) && input != duplicate
+
+    puts display_input_warning
+    symbol_input(duplicate)
+  end
+
+  def player_symbol_prompts(duplicate)
+    puts display_symbol_prompt
+    puts display_first_symbol(duplicate) if duplicate
+  end
+
+  def switch_current_player
+    if current_player == first_player
+      second_player
+    else
+      first_player
     end
   end
 end
