@@ -35,30 +35,16 @@ describe Game do
     end
   end
 
-  describe '#player_turns' do
-    context 'when board is full' do
-    end
-    context 'when board is game over' do
-    end
-  end
-
   describe '#turn' do
-  end
-
-  describe '#turn_input' do
-  end
-
-  describe '#conclusion' do
-    context 'when board is game over' do
-    end
-    context 'when board is full' do
-    end
-  end
-
-  describe '#repeat_game' do
-    context 'when repeat input is y' do
-    end
-    context 'when repeat input is not y' do
+    it 'updates the board' do
+      game.instance_variable_set(:@first_player, instance_double(Player))
+      player_symbol = 'x'
+      player_input = 2
+      allow(game.first_player).to receive(:symbol).and_return(player_symbol)
+      allow(game).to receive(:turn_input).with(game.first_player).and_return(player_input)
+      allow(game.board).to receive(:show)
+      expect(game.board).to receive(:update_board).with(player_input - 1, player_symbol)
+      game.turn(game.first_player)
     end
   end
 end

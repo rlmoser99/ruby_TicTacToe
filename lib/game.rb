@@ -22,9 +22,6 @@ class Game
     repeat_game
   end
 
-  # The methods below are only used iternally & could be 'private'
-  # However, the message(s) that are sent should be tested.
-
   def create_player(number, duplicate_symbol = nil)
     puts display_name_prompt(number)
     name = gets.chomp
@@ -32,48 +29,10 @@ class Game
     Player.new(name, symbol)
   end
 
-  def player_turns
-    @current_player = first_player
-    until board.full?
-      turn(current_player)
-      break if board.game_over?
-
-      @current_player = switch_current_player
-    end
-  end
-
   def turn(player)
     cell = turn_input(player)
     board.update_board(cell - 1, player.symbol)
     board.show
-  end
-
-  def turn_input(player)
-    puts display_player_turn(player.name, player.symbol)
-    number = gets.chomp.to_i
-    return number if board.valid_move?(number)
-
-    puts display_input_warning
-    turn_input(player)
-  end
-
-  def conclusion
-    if board.game_over?
-      puts display_winner(current_player.name)
-    else
-      puts display_tie
-    end
-  end
-
-  def repeat_game
-    puts display_play_again
-    repeat_input = gets.chomp.downcase
-    if repeat_input == 'y'
-      game = Game.new
-      game.play
-    else
-      puts closing_greeting(first_player.name, second_player.name)
-    end
   end
 
   private
@@ -98,11 +57,49 @@ class Game
     puts display_first_symbol(duplicate) if duplicate
   end
 
+  def player_turns
+    @current_player = first_player
+    until board.full?
+      turn(current_player)
+      break if board.game_over?
+
+      @current_player = switch_current_player
+    end
+  end
+
+  def turn_input(player)
+    puts display_player_turn(player.name, player.symbol)
+    number = gets.chomp.to_i
+    return number if board.valid_move?(number)
+
+    puts display_input_warning
+    turn_input(player)
+  end
+
   def switch_current_player
     if current_player == first_player
       second_player
     else
       first_player
+    end
+  end
+
+  def conclusion
+    if board.game_over?
+      puts display_winner(current_player.name)
+    else
+      puts display_tie
+    end
+  end
+
+  def repeat_game
+    puts display_play_again
+    repeat_input = gets.chomp.downcase
+    if repeat_input == 'y'
+      game = Game.new
+      game.play
+    else
+      puts closing_greeting(first_player.name, second_player.name)
     end
   end
 end
