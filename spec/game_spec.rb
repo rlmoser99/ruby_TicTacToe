@@ -4,6 +4,8 @@ require_relative '../lib/game'
 require_relative '../lib/board'
 require_relative '../lib/player'
 
+# rubocop:disable Metrics/BlockLength
+
 describe Game do
   subject(:game) { described_class.new }
 
@@ -49,4 +51,4 @@ describe Game do
   end
 end
 
-# rubocop:enable
+# rubocop:enable Metrics/BlockLength
