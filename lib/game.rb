@@ -22,19 +22,25 @@ class Game
     repeat_game
   end
 
+  def create_player(number, duplicate_symbol = nil)
+    puts display_name_prompt(number)
+    name = gets.chomp
+    symbol = symbol_input(duplicate_symbol)
+    Player.new(name, symbol)
+  end
+
+  def turn(player)
+    cell = turn_input(player)
+    board.update_board(cell - 1, player.symbol)
+    board.show
+  end
+
   private
 
   def game_set_up
     puts display_intro
     @first_player = create_player(1)
     @second_player = create_player(2, first_player.symbol)
-  end
-
-  def create_player(number, duplicate_symbol = nil)
-    puts display_name_prompt(number)
-    name = gets.chomp
-    symbol = symbol_input(duplicate_symbol)
-    Player.new(name, symbol)
   end
 
   def symbol_input(duplicate)
@@ -59,12 +65,6 @@ class Game
 
       @current_player = switch_current_player
     end
-  end
-
-  def turn(player)
-    cell = turn_input(player)
-    board.update_board(cell - 1, player.symbol)
-    board.show
   end
 
   def turn_input(player)
