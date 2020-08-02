@@ -19,7 +19,6 @@ class Game
     board.show
     player_turns
     conclusion
-    repeat_game
   end
 
   def create_player(number, duplicate_symbol = nil)
@@ -89,17 +88,6 @@ class Game
       puts display_winner(current_player.name)
     else
       puts display_tie
-    end
-  end
-
-  def repeat_game
-    puts display_play_again
-    repeat_input = gets.chomp.downcase
-    if repeat_input == 'y'
-      game = Game.new
-      game.play
-    else
-      puts closing_greeting(first_player.name, second_player.name)
     end
   end
 end
