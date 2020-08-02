@@ -18,7 +18,6 @@ describe Game do
       allow(game).to receive(:game_set_up)
       allow(game).to receive(:player_turns)
       allow(game).to receive(:conclusion)
-      allow(game).to receive(:repeat_game)
       expect(game.board).to receive(:show)
       game.play
     end
